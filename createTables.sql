@@ -1,5 +1,5 @@
 BEGIN 
-    FOR I IN (SELECT table_name FROM USER_TABLES) 
+    FOR i IN (SELECT table_name FROM USER_TABLES) 
   LOOP
     EXECUTE IMMEDIATE ('drop table ' || i.table_name || ' CASCADE CONSTRAINTS ');
   END LOOP;
