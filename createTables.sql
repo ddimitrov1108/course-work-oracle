@@ -1,4 +1,14 @@
-CREATE OR REPLACE TABLE clients(
+BEGIN 
+    FOR I IN (SELECT table_name FROM USER_TABLES) 
+  LOOP
+    EXECUTE IMMEDIATE ('drop table ' || i.table_name || ' CASCADE CONSTRAINTS ');
+  END LOOP;
+END;
+/
+
+purge RECYCLEBIN;
+
+CREATE TABLE clients(
     id INT,
     full_name VARCHAR(40) NOT NULL,
     address_city VARCHAR(20) NOT NULL,
@@ -7,13 +17,13 @@ CREATE OR REPLACE TABLE clients(
     PRIMARY KEY(id)
 );
 
-CREATE OR REPLACE TABLE employee_positions(
+CREATE TABLE employee_positions(
     id INT,
     position VARCHAR(20) NOT NULL,
     PRIMARY KEY(id)
 ); 
 
-CREATE OR REPLACE TABLE employees(
+CREATE TABLE employees(
     id INT,
     full_name VARCHAR(40) NOT NULL,
     position_id REFERENCES employee_positions(id),
@@ -21,26 +31,26 @@ CREATE OR REPLACE TABLE employees(
     PRIMARY KEY(id)
 );
 
-CREATE OR REPLACE TABLE car_types(
+CREATE TABLE car_types(
     id INT,
     type VARCHAR(20) NOT NULL,
     PRIMARY KEY(id)
 ); 
 
-CREATE OR REPLACE TABLE car_brands(
+CREATE TABLE car_brands(
     id INT,
     brand VARCHAR(20) NOT NULL,
     PRIMARY KEY(id)
 );
 
-CREATE OR REPLACE TABLE car_models(
+CREATE TABLE car_models(
     id INT,
     model VARCHAR(20),
     brand_id REFERENCES car_brands(id),
     PRIMARY KEY(id)
 );
 
-CREATE OR REPLACE TABLE cars(
+CREATE TABLE cars(
     id INT,
     type_id REFERENCES car_types(id),
     brand VARCHAR(20) NOT NULL,
@@ -52,7 +62,7 @@ CREATE OR REPLACE TABLE cars(
     PRIMARY KEY(id)
 );
 
-CREATE OR REPLACE TABLE rents(
+CREATE TABLE rents(
     id INT,
     client_id REFERENCES clients(id),
     car_id REFERENCES cars(id),
